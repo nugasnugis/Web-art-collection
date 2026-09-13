@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>Art Collection</title>
+  <meta name="description" content="A collection of artworks.">
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --text: #171717;
+      --muted: #777;
+      --card: #fff;
+      --line: #dedad2;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    header {
+      padding: 56px 6vw 36px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-weight: 400;
+      letter-spacing: -0.04em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+    }
+
+    main { padding: 34px 5vw 70px; }
+
+    #gallery {
+      columns: 4 240px;
+      column-gap: 22px;
+    }
+
+    .art-card {
+      display: inline-block;
+      width: 100%;
+      margin: 0 0 22px;
+      break-inside: avoid;
+      background: var(--card);
+      border: 1px solid var(--line);
+      cursor: zoom-in;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .art-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+
+    .art-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #eee;
+    }
+
+    .caption {
+      padding: 12px 14px 14px;
+      font-family: Arial, sans-serif;
+      font-size: .82rem;
+      overflow-wrap: anywhere;
+    }
+
+    .caption span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+
+    #status {
+      padding: 70px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+    }
+
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background: rgba(0,0,0,.88);
+      cursor: zoom-out;
+    }
+
+    #lightbox.open { display: flex; }
+
+    #lightbox img {
+      max-width: 96vw;
+      max-height: 92vh;
+      object-fit: contain;
+      box-shadow: 0 10px 50px rgba(0,0,0,.4);
+    }
+
+    #close {
+      position: fixed;
+      top: 18px;
+      right: 24px;
+      color: white;
+      font: 32px/1 Arial, sans-serif;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 38px 7vw 28px; }
+      main { padding: 24px 4vw 50px; }
+      #gallery { columns: 2 150px; column-gap: 12px; }
+      .art-card { margin-bottom: 12px; }
+      .caption { padding: 9px 10px 11px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Art Collection</h1>
+    <p>A growing collection of artworks · <span id="count">loading…</span></p>
+  </header>
+
+  <main>
+    <div id="status">Loading artworks…</div>
+    <section id="gallery" aria-label="Artwork collection"></section>
+  </main>
+
+  <div id="lightbox" aria-hidden="true">
+    <div id="close" aria-label="Close">×</div>
+    <img id="lightbox-image" alt="">
+  </div>
+
+  <script>
+    // The gallery reads the GitHub /art folder automatically.
+    // Add an image to /art, push it to GitHub, refresh the page — done.
+    const OWNER = "nugasnugis";
+    const REPO = "Web-art-collection";
+    const BRANCH = "main";
+    const API = `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`;
+    const RAW = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/`;
+    const IMAGE_EXTENSIONS = /\.(avif|gif|jpe?g|png|svg|webp)$/i;
+
+    const gallery = document.getElementById("gallery");
+    const status = document.getElementById("status");
+    const count = document.getElementById("count");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+
+    function titleFromPath(path) {
+      const filename = path.split("/").pop();
+      return filename
+        .replace(/\.[^.]+$/, "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function openLightbox(src, alt) {
+      lightboxImage.src = src;
+      lightboxImage.alt = alt;
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImage.src = "";
+      document.body.style.overflow = "";
+    }
+
+    lightbox.addEventListener("click", closeLightbox);
+    lightboxImage.addEventListener("click", e => e.stopPropagation());
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeLightbox();
+    });
+
+    async function loadArt() {
+      try {
+        const response = await fetch(API, {
+          headers: { "Accept": "application/vnd.github+json" }
+        });
+        if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
+
+        const data = await response.json();
+        const files = (data.tree || [])
+          .filter(item => item.type === "blob")
+          .filter(item => item.path.startsWith("art/"))
+          .filter(item => IMAGE_EXTENSIONS.test(item.path));
+
+        gallery.innerHTML = "";
+        count.textContent = `${files.length} artwork${files.length === 1 ? "" : "s"}`;
+
+        if (!files.length) {
+          status.textContent = "No artworks yet. Add image files to the /art folder on GitHub.";
+          return;
+        }
+
+        status.remove();
+
+        for (const file of files) {
+          const src = RAW + file.path.split("/").map(encodeURIComponent).join("/");
+          const title = titleFromPath(file.path);
+
+          const card = document.createElement("article");
+          card.className = "art-card";
+          card.addEventListener("click", () => openLightbox(src, title));
+
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = title;
+          img.loading = "lazy";
+          img.decoding = "async";
+
+          const caption = document.createElement("div");
+          caption.className = "caption";
+          caption.textContent = title;
+
+          const path = document.createElement("span");
+          path.textContent = file.path;
+          caption.appendChild(path);
+
+          card.append(img, caption);
+          gallery.appendChild(card);
+        }
+      } catch (error) {
+        console.error(error);
+        count.textContent = "unable to load";
+        status.innerHTML = "Could not load the artwork collection.<br><small>Check that the repository is public and the GitHub API is reachable.</small>";
+      }
+    }
+
+    loadArt();
+  </script>
+</body>
+</html>
