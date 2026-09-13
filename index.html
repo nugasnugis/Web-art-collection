@@ -1,258 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111111">
-  <title>Art Collection</title>
-  <meta name="description" content="A collection of artworks.">
-  <style>
-    :root {
-      --bg: #f7f4ee;
-      --text: #171717;
-      --muted: #777;
-      --card: #fff;
-      --line: #dedad2;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Georgia, "Times New Roman", serif;
-    }
-
-    header {
-      padding: 56px 6vw 36px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(2.2rem, 6vw, 5rem);
-      font-weight: 400;
-      letter-spacing: -0.04em;
-    }
-
-    header p {
-      margin: 0;
-      color: var(--muted);
-      font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-    }
-
-    main { padding: 34px 5vw 70px; }
-
-    #gallery {
-      columns: 4 240px;
-      column-gap: 22px;
-    }
-
-    .art-card {
-      display: inline-block;
-      width: 100%;
-      margin: 0 0 22px;
-      break-inside: avoid;
-      background: var(--card);
-      border: 1px solid var(--line);
-      cursor: zoom-in;
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .art-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.08);
-    }
-
-    .art-card img {
-      display: block;
-      width: 100%;
-      height: auto;
-      background: #eee;
-    }
-
-    .caption {
-      padding: 12px 14px 14px;
-      font-family: Arial, sans-serif;
-      font-size: .82rem;
-      overflow-wrap: anywhere;
-    }
-
-    .caption span {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: .72rem;
-    }
-
-    #status {
-      padding: 70px 20px;
-      text-align: center;
-      color: var(--muted);
-      font-family: Arial, sans-serif;
-    }
-
-    #lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-      background: rgba(0,0,0,.88);
-      cursor: zoom-out;
-    }
-
-    #lightbox.open { display: flex; }
-
-    #lightbox img {
-      max-width: 96vw;
-      max-height: 92vh;
-      object-fit: contain;
-      box-shadow: 0 10px 50px rgba(0,0,0,.4);
-    }
-
-    #close {
-      position: fixed;
-      top: 18px;
-      right: 24px;
-      color: white;
-      font: 32px/1 Arial, sans-serif;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    @media (max-width: 600px) {
-      header { padding: 38px 7vw 28px; }
-      main { padding: 24px 4vw 50px; }
-      #gallery { columns: 2 150px; column-gap: 12px; }
-      .art-card { margin-bottom: 12px; }
-      .caption { padding: 9px 10px 11px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7089ff">
+<meta name="description" content="A small collection of drawings, sketches, illustrations, and little pieces of art.">
+<title>Drawn with feeling.</title>
+<style>
+:root{--bg:#fffdfb;--ink:#27324e;--muted:#818aa0;--blue:#7089ff;--pink:#f2a7c7;--line:#e9ebf4;--serif:Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}a{color:inherit;text-decoration:none}.page{width:min(calc(100% - 40px),1080px);margin:auto}
+.hero{position:relative;min-height:700px;display:grid;align-items:center;padding:65px 0 110px;overflow:hidden}.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none;filter:blur(5px)}.hero:before{width:620px;height:620px;left:-350px;top:-230px;background:radial-gradient(circle,rgba(224,230,255,.65),transparent 68%)}.hero:after{width:540px;height:540px;right:-320px;top:20px;background:radial-gradient(circle,rgba(255,226,239,.52),transparent 68%)}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:55px}.eyebrow,.section-label{font-size:9px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}.eyebrow{display:inline-flex;gap:7px;align-items:center;padding:6px 10px;border-radius:99px;background:#f0f3ff;color:#7790eb;letter-spacing:.08em}.eyebrow:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--pink)}
+.hero h1{margin:20px 0 15px;font:400 clamp(4rem,7vw,6.7rem)/.86 var(--serif);letter-spacing:-.065em}.hero h1 em{color:var(--blue);font-style:italic}.hero-copy{max-width:480px;color:var(--muted);font-size:13px;line-height:1.8}.hero-actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 18px;border:1px solid #e2e6f3;border-radius:99px;background:#fff;color:#526fe5;font-size:11px;font-weight:750;transition:.2s}.button.primary{background:var(--blue);color:white;border-color:transparent;box-shadow:0 10px 24px rgba(112,137,255,.28)}.button:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(70,88,145,.14)}
+.hero-art-wrap{position:relative;min-height:420px;display:grid;place-items:center}.hero-art{position:relative;width:min(100%,430px);aspect-ratio:1;padding:9px;border-radius:26px;background:white;box-shadow:0 25px 55px rgba(56,69,116,.16);transform:rotate(1.3deg);cursor:zoom-in}.hero-art:before{content:"";position:absolute;width:62px;height:19px;left:25px;top:-13px;background:var(--pink);transform:rotate(-2deg)}.hero-art img{display:block;width:100%;height:100%;border-radius:18px;object-fit:cover;background:#edf0ef}.hero-note{position:absolute;right:-18px;bottom:28px;width:105px;min-height:66px;padding:13px 10px;display:grid;place-items:center;text-align:center;color:#7581ad;background:white;box-shadow:0 13px 30px rgba(59,73,120,.12);font:italic 11px var(--serif);transform:rotate(5deg)}.hero-note:after{content:"♡";position:absolute;right:8px;bottom:4px;color:var(--pink)}
+.nav{position:absolute;z-index:5;left:50%;bottom:45px;transform:translateX(-50%);display:flex;align-items:center;justify-content:space-between;width:min(calc(100% - 30px),740px);padding:15px 18px;border:1px solid rgba(232,235,245,.8);border-radius:16px;background:rgba(255,255,255,.8);backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(67,81,130,.07)}.brand{font:700 13px var(--serif)}.nav-links{display:flex;gap:20px;color:#748099;font-size:10px;font-weight:700}.nav-links a:hover{color:var(--blue)}
+.section{padding:55px 0 95px}.section-head{display:grid;grid-template-columns:1fr 300px;gap:50px;align-items:end;margin-bottom:24px}.section-label{color:var(--pink)}.section h2{margin:8px 0 0;font:400 clamp(2.6rem,4vw,3.9rem)/.95 var(--serif);letter-spacing:-.055em}.section-intro{margin:0;color:var(--muted);font-size:11px;line-height:1.7}#status{padding:70px 20px;text-align:center;color:var(--muted);font-size:13px}
+#gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}.art-card{overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 18px 45px rgba(73,91,150,.1);cursor:zoom-in;transition:.25s}.art-card:hover{transform:translateY(-5px);box-shadow:0 24px 55px rgba(73,91,150,.15)}.art-image{overflow:hidden;background:linear-gradient(135deg,#f0f1ff,#fff2f8);aspect-ratio:1/1.1}.art-card:nth-child(3n+2) .art-image{aspect-ratio:1/1.22}.art-card:nth-child(3n) .art-image{aspect-ratio:1/1.08}.art-image img{display:block;width:100%;height:100%;object-fit:cover;transition:.45s}.art-card:hover .art-image img{transform:scale(1.025)}.caption{padding:13px 15px 16px;min-height:76px}.caption-kicker{margin-bottom:5px;color:var(--pink);font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.caption-title{font:17px/1.05 var(--serif)}.caption-meta{margin-top:5px;color:var(--muted);font-size:9px;overflow-wrap:anywhere}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:80px;padding:85px 0 115px}.about h2{margin-top:9px}.about-copy{padding-top:17px;color:var(--muted);font-size:11px;line-height:1.9}.about-copy p{margin:0 0 18px}.signature{color:#7180bd;font:italic 12px var(--serif)}footer{min-height:125px;display:grid;place-items:center;padding:25px;background:var(--blue);color:white;text-align:center}.footer-title{font:17px var(--serif)}.footer-meta{margin-top:3px;font-size:9px;opacity:.8}
+#lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:30px;background:rgba(20,25,42,.92);cursor:zoom-out}#lightbox.open{display:flex}#lightbox-image{max-width:94vw;max-height:90vh;object-fit:contain;border-radius:10px;box-shadow:0 25px 80px rgba(0,0,0,.4)}#close{position:fixed;top:18px;right:25px;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font:29px/1 Arial;cursor:pointer}
+@media(max-width:820px){.hero{min-height:auto;padding:65px 0 110px}.hero-inner{grid-template-columns:1fr;gap:40px}.hero-art-wrap{min-height:370px}.hero-art{width:min(78vw,420px)}.section-head{grid-template-columns:1fr;gap:14px}#gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.about{gap:35px}}
+@media(max-width:560px){.page{width:min(calc(100% - 28px),1080px)}.hero{padding-top:42px}.hero h1{font-size:clamp(3.5rem,16vw,5.1rem)}.hero-art-wrap{min-height:310px}.hero-art{width:min(84vw,380px)}.hero-note{right:-4px;bottom:10px}.nav{bottom:24px;padding:12px 14px}.nav-links{gap:12px}#gallery{grid-template-columns:1fr;gap:14px}.art-card:nth-child(n) .art-image{aspect-ratio:1/1.08}.about{grid-template-columns:1fr;gap:5px;padding-top:55px}.about-copy{padding-top:0}.section{padding-bottom:65px}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Art Collection</h1>
-    <p>A growing collection of artworks · <span id="count">loading…</span></p>
-  </header>
-
-  <main>
-    <div id="status">Loading artworks…</div>
-    <section id="gallery" aria-label="Artwork collection"></section>
-  </main>
-
-  <div id="lightbox" aria-hidden="true">
-    <div id="close" aria-label="Close">×</div>
-    <img id="lightbox-image" alt="">
+<header class="hero" id="top">
+  <div class="page hero-inner">
+    <div>
+      <span class="eyebrow">A little collection</span>
+      <h1>Drawn with<br><em>feeling.</em></h1>
+      <p class="hero-copy">A personal corner for sketches, illustrations, and little pieces of art worth keeping. Simple, soft, and a little bit dreamy.</p>
+      <div class="hero-actions"><a class="button primary" href="#gallery">View the collection ↓</a><a class="button" href="#about">About the artist</a></div>
+    </div>
+    <div class="hero-art-wrap">
+      <div class="hero-art" id="hero-art" role="button" tabindex="0" aria-label="Open featured artwork"><img id="hero-image" alt="Featured artwork"></div>
+      <div class="hero-note">first piece<br>pencil sketch</div>
+    </div>
   </div>
-
-  <script>
-    // The gallery reads the GitHub /art folder automatically.
-    // Add an image to /art, push it to GitHub, refresh the page — done.
-    const OWNER = "nugasnugis";
-    const REPO = "Web-art-collection";
-    const BRANCH = "main";
-    const API = `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`;
-    const RAW = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/`;
-    const IMAGE_EXTENSIONS = /\.(avif|gif|jpe?g|png|svg|webp)$/i;
-
-    const gallery = document.getElementById("gallery");
-    const status = document.getElementById("status");
-    const count = document.getElementById("count");
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImage = document.getElementById("lightbox-image");
-
-    function titleFromPath(path) {
-      const filename = path.split("/").pop();
-      return filename
-        .replace(/\.[^.]+$/, "")
-        .replace(/[-_]+/g, " ")
-        .replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    function openLightbox(src, alt) {
-      lightboxImage.src = src;
-      lightboxImage.alt = alt;
-      lightbox.classList.add("open");
-      lightbox.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove("open");
-      lightbox.setAttribute("aria-hidden", "true");
-      lightboxImage.src = "";
-      document.body.style.overflow = "";
-    }
-
-    lightbox.addEventListener("click", closeLightbox);
-    lightboxImage.addEventListener("click", e => e.stopPropagation());
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeLightbox();
-    });
-
-    async function loadArt() {
-      try {
-        const response = await fetch(API, {
-          headers: { "Accept": "application/vnd.github+json" }
-        });
-        if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
-
-        const data = await response.json();
-        const files = (data.tree || [])
-          .filter(item => item.type === "blob")
-          .filter(item => item.path.startsWith("art/"))
-          .filter(item => IMAGE_EXTENSIONS.test(item.path));
-
-        gallery.innerHTML = "";
-        count.textContent = `${files.length} artwork${files.length === 1 ? "" : "s"}`;
-
-        if (!files.length) {
-          status.textContent = "No artworks yet. Add image files to the /art folder on GitHub.";
-          return;
-        }
-
-        status.remove();
-
-        for (const file of files) {
-          const src = RAW + file.path.split("/").map(encodeURIComponent).join("/");
-          const title = titleFromPath(file.path);
-
-          const card = document.createElement("article");
-          card.className = "art-card";
-          card.addEventListener("click", () => openLightbox(src, title));
-
-          const img = document.createElement("img");
-          img.src = src;
-          img.alt = title;
-          img.loading = "lazy";
-          img.decoding = "async";
-
-          const caption = document.createElement("div");
-          caption.className = "caption";
-          caption.textContent = title;
-
-          const path = document.createElement("span");
-          path.textContent = file.path;
-          caption.appendChild(path);
-
-          card.append(img, caption);
-          gallery.appendChild(card);
-        }
-      } catch (error) {
-        console.error(error);
-        count.textContent = "unable to load";
-        status.innerHTML = "Could not load the artwork collection.<br><small>Check that the repository is public and the GitHub API is reachable.</small>";
-      }
-    }
-
-    loadArt();
-  </script>
+  <nav class="nav page"><a class="brand" href="#top">art collection</a><div class="nav-links"><a href="#gallery">Gallery</a><a href="#about">About</a></div></nav>
+</header>
+<main class="page">
+  <section class="section" id="gallery-section">
+    <div class="section-head"><div><div class="section-label">The archive</div><h2>Selected works</h2></div><p class="section-intro">Every image placed inside <strong>/art</strong> appears here automatically. <span id="count"></span></p></div>
+    <div id="status">Loading artworks…</div><section id="gallery" aria-label="Artwork collection"></section>
+  </section>
+  <section class="about" id="about">
+    <div><div class="section-label">About</div><h2 class="section">The artist</h2></div>
+    <div class="about-copy"><p>This space is made to collect and preserve the artwork of a friend — from quick pencil sketches to whatever creative pieces come next.</p><p>The design intentionally keeps plenty of white space around the artwork, with blue and pink accents inspired by the artist’s favorite colors.</p><p class="signature">made with ♡</p></div>
+  </section>
+</main>
+<footer><div><div class="footer-title">Keep creating.</div><div class="footer-meta">© 2026 · A small art collection</div></div></footer>
+<div id="lightbox" aria-hidden="true"><div id="close" aria-label="Close">×</div><img id="lightbox-image" alt=""></div>
+<script>
+const OWNER="nugasnugis",REPO="Web-art-collection",BRANCH="main";
+const API=`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`,RAW=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/`,IMAGE_EXTENSIONS=/\.(avif|gif|jpe?g|png|svg|webp)$/i;
+const gallery=document.getElementById("gallery"),status=document.getElementById("status"),count=document.getElementById("count"),heroImage=document.getElementById("hero-image"),heroArt=document.getElementById("hero-art"),lightbox=document.getElementById("lightbox"),lightboxImage=document.getElementById("lightbox-image");
+function titleFromPath(path){return path.split("/").pop().replace(/\.[^.]+$/," ").replace(/[-_]+/g," ").replace(/\s+/g," ").trim().replace(/\b\w/g,c=>c.toUpperCase())}
+function srcFor(path){return RAW+path.split("/").map(encodeURIComponent).join("/")}
+function openLightbox(src,alt){lightboxImage.src=src;lightboxImage.alt=alt;lightbox.classList.add("open");lightbox.setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
+function closeLightbox(){lightbox.classList.remove("open");lightbox.setAttribute("aria-hidden","true");lightboxImage.src="";document.body.style.overflow=""}
+lightbox.addEventListener("click",closeLightbox);lightboxImage.addEventListener("click",e=>e.stopPropagation());document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLightbox()});
+heroArt.addEventListener("click",()=>{if(heroImage.src)openLightbox(heroImage.src,heroImage.alt)});heroArt.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&heroImage.src){e.preventDefault();openLightbox(heroImage.src,heroImage.alt)}});
+function createCard(file,index){const src=srcFor(file.path),title=titleFromPath(file.path),card=document.createElement("article");card.className="art-card";card.onclick=()=>openLightbox(src,title);const wrap=document.createElement("div");wrap.className="art-image";const img=document.createElement("img");img.src=src;img.alt=title;img.loading="lazy";img.decoding="async";const cap=document.createElement("div");cap.className="caption";const kick=document.createElement("div");kick.className="caption-kicker";kick.textContent=`${String(index+1).padStart(2,"0")} · artwork`;const name=document.createElement("div");name.className="caption-title";name.textContent=title;const meta=document.createElement("div");meta.className="caption-meta";meta.textContent=file.path;wrap.appendChild(img);cap.append(kick,name,meta);card.append(wrap,cap);return card}
+async function loadArt(){try{const response=await fetch(API,{headers:{Accept:"application/vnd.github+json"}});if(!response.ok)throw Error(`GitHub API returned ${response.status}`);const data=await response.json();const files=(data.tree||[]).filter(x=>x.type==="blob"&&x.path.startsWith("art/")&&IMAGE_EXTENSIONS.test(x.path));files.sort((a,b)=>a.path.localeCompare(b.path,undefined,{numeric:true,sensitivity:"base"}));gallery.innerHTML="";count.textContent=`${files.length} artwork${files.length===1?"":"s"}`;if(!files.length){status.innerHTML='No artworks yet.<br><small>Add image files to the <strong>/art</strong> folder on GitHub.</small>';return}const featured=files[0];heroImage.src=srcFor(featured.path);heroImage.alt=titleFromPath(featured.path);document.querySelector(".hero-note").innerHTML=`${titleFromPath(featured.path)}<br>first piece ♡`;status.remove();files.forEach((file,i)=>gallery.appendChild(createCard(file,i)))}catch(error){console.error(error);count.textContent="unable to load";status.innerHTML="Could not load the artwork collection.<br><small>Check that the repository is public and the GitHub API is reachable.</small>"}}
+loadArt();
+</script>
 </body>
 </html>
